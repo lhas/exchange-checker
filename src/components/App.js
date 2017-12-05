@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Platform,
   StyleSheet,
@@ -6,30 +6,16 @@ import {
   Button,
   View
 } from 'react-native';
+import { StackNavigator } from 'react-navigation';
+import HomeScreen from '../screens/Home';
 
-export default class App extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Exchange Checker
-        </Text>
-        <Button title="Start" />
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+const RootNavigator = StackNavigator({
+  Home: {
+    screen: HomeScreen,
+    navigationOptions: {
+      headerTitle: 'Exchange Checker',
+    },
   },
 });
+
+export default RootNavigator;
