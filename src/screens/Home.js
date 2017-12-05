@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   View,
-  Linking,
 } from 'react-native';
 import { Container, Header, Content, Card, CardItem, Body, Button, Text, } from 'native-base';
 import Loading from '../components/Loading';

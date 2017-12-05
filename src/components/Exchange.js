@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   View,
+  Linking,
 } from 'react-native';
 import { Container, Header, Content, Card, CardItem, Body, Button, Text, Spinner, } from 'native-base';
 import { colorsScale, } from '../helpers';
