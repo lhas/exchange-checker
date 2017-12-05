@@ -11,17 +11,33 @@ class HomeScreen extends React.Component {
     exchanges: [],
   };
 
-  componentDidMount() {
-    axios.get('https://api.bitvalor.com/v1/exchanges.json').then((response) => {
-      const exchanges = Object.keys(response.data).map(v => {
-        return response.data[v];
-      });
-      console.log(exchanges);
+  async componentDidMount() {
+    const requestTickers = axios.get('https://api.bitvalor.com/v1/ticker.json');
+    const requestExchanges = axios.get('https://api.bitvalor.com/v1/exchanges.json');
 
-      this.setState({
-        exchanges,
-      });
-    })
+    const [ tickersResponse, exchangesResponse ] = await Promise.all([
+      requestTickers,
+      requestExchanges
+    ]);
+
+    const exchanges = Object.keys(exchangesResponse.data)
+    .map(exchange => ({
+      id: exchange,
+      ...exchangesResponse.data[exchange],
+    }))
+    .map(exchange => ({
+        ...exchange,
+        tickers: tickersResponse.data.ticker_24h.exchanges[exchange.id],
+    }))
+    .map(exchange => ({
+      ...exchange,
+      variation: !!exchange.tickers ? (((exchange.tickers.last / exchange.tickers.open) - 1) * 100).toFixed(2) : 0,
+    }))
+    .filter(exchange => exchange.variation > 0);
+  
+    this.setState({
+      exchanges,
+    });
   }
   render() {
     return (
@@ -42,7 +58,7 @@ class HomeScreen extends React.Component {
               Actual Price: R$2.35
             </Text>
             <Text style={{flex: 1 }}>
-              Variation: 5.65%
+              Variation: {exchange.variation}
             </Text>
           </CardItem>
           <CardItem>
