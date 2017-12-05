@@ -4,8 +4,12 @@ const colorsScale = (value) => {
   if (value > 1) {
     color = 'green';
   } else if(value > 0 && value < 1) {
-    color = 'light-green';
+    color = 'lightgreen';
   } else {
     color = 'red';
   }
+
+  return color;
 }
+
+export default colorsScale;
