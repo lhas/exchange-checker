@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-  View
+  View,
+  Linking,
 } from 'react-native';
-import { Container, Header, Content, Card, CardItem, Body, Text } from 'native-base';
+import { Container, Header, Content, Card, CardItem, Body, Button, Text } from 'native-base';
 import axios from 'axios';
 
 class HomeScreen extends React.Component {
@@ -28,13 +29,27 @@ class HomeScreen extends React.Component {
         <Content>
           {this.state.exchanges.map((exchange, k) => (
           <Card key={k}>
+          <CardItem style={{flex: 1, flexDirection: 'row' }} header>
+            <Text style={{flex: 1 }}>
+              {exchange.name}
+            </Text>
+            <Text style={{flex: 1 }}>
+              Volume: 0.015
+            </Text>
+          </CardItem>
+          <CardItem style={{flex: 1, flexDirection: 'row' }}>
+            <Text style={{flex: 1 }}>
+              Actual Price: R$2.35
+            </Text>
+            <Text style={{flex: 1 }}>
+              Variation: 5.65%
+            </Text>
+          </CardItem>
           <CardItem>
             <Body>
-              <Text style={{ color: `#${exchange.color}` }}>
-                {exchange.name}
-                {exchange.url}
-                {exchange.url_book}
-              </Text>
+              <Button style={{ backgroundColor: `#${exchange.color}` }} onPress={()=> Linking.openURL(exchange.url_book)}>
+                <Text>Trade Now</Text>
+              </Button>
             </Body>
           </CardItem>
           </Card>
