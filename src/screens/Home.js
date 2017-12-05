@@ -6,8 +6,12 @@ import {
 import { Container, Header, Content, Card, CardItem, Body, Button, Text, } from 'native-base';
 import Loading from '../components/Loading';
 import Exchange from '../components/Exchange';
+import Error from '../components/Error';
 import { parseExchanges, } from '../helpers';
 import { BitValorService } from '../services';
+
+const MINUTE_IN_SECONDS = 1000;
+const SECONDS_TO_REFRESH = 30;
 
 class HomeScreen extends React.Component {
   state = {
@@ -18,13 +22,11 @@ class HomeScreen extends React.Component {
 
   async componentDidMount() {
     try {
-      const [ tickersResponse, exchangesResponse ] = await BitValorService.fetch();
-      const exchanges = parseExchanges(exchangesResponse, tickersResponse);
-    
-      this.setState({
-        exchanges,
-        loading: false,
-      });
+      await this.fetch();
+
+      setInterval(() => {
+        this.fetch()
+      }, SECONDS_TO_REFRESH * MINUTE_IN_SECONDS);
     } catch (e) {
       this.setState({
         error: true,
@@ -32,7 +34,25 @@ class HomeScreen extends React.Component {
       });
     }
   }
+
+  async fetch() {
+    await this.setState({
+      loading: true,
+    });
+    const [ tickersResponse, exchangesResponse ] = await BitValorService.fetch();
+    const exchanges = parseExchanges(exchangesResponse, tickersResponse);
+  
+    this.setState({
+      exchanges,
+      loading: false,
+    });
+  }
+
   render() {
+    if (this.state.error) {
+      return <Error />;
+    }
+
     if (this.state.loading) {
       return <Loading />;
     }
