@@ -17,15 +17,17 @@ class HomeScreen extends React.Component {
   };
 
   async componentDidMount() {
-    const socket = io('http://10.0.2.2:8080/');
+    const socket = io('https://salty-bastion-15254.herokuapp.com/');
+    
+    socket.on('exchanges', (exchanges) => this.setExchanges(exchanges))
+    socket.on('refresh', (exchanges) => this.setExchanges(exchanges))
+  }
 
-    socket.on('exchanges', (exchanges) => {
-      this.setState({
-        exchanges,
-        loading: false,
-      });
-    })
-
+  setExchanges(exchanges) {
+    this.setState({
+      exchanges,
+      loading: false,
+    });
   }
 
   render() {
