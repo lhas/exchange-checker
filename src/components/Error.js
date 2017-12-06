@@ -2,7 +2,6 @@ import React from 'react';
 import {
   View,
 } from 'react-native';
-import { Spinner, } from 'native-base';
 
 const Error = () => (
   <View style={{ flex: 1, 

@@ -16,7 +16,7 @@ const Exchange = ({ id, name, tickers, variation, url_book, color}) => (
   <CardItem>
     <View>
       <Text style={{ fontWeight: 'bold', }}>
-        Volumes:{' '}
+        Volume:{' '}
       </Text>
       <Text style={{ color: '#FF9800' }}>
       {Math.ceil(tickers.vol).toFixed(2)} BTC

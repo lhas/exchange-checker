@@ -6,11 +6,8 @@ import { Container, Header, Content, Card, CardItem, Body, Button, Text, } from 
 import Loading from '../components/Loading';
 import Exchange from '../components/Exchange';
 import Error from '../components/Error';
-import { parseExchanges, } from '../helpers';
-import { BitValorService } from '../services';
-
-const MINUTE_IN_SECONDS = 1000;
-const SECONDS_TO_REFRESH = 30;
+import io from 'socket.io-client';
+import axios from 'axios';
 
 class HomeScreen extends React.Component {
   state = {
@@ -20,31 +17,15 @@ class HomeScreen extends React.Component {
   };
 
   async componentDidMount() {
-    try {
-      await this.fetch();
+    const socket = io('http://10.0.2.2:8080/');
 
-      setInterval(() => {
-        this.fetch()
-      }, SECONDS_TO_REFRESH * MINUTE_IN_SECONDS);
-    } catch (e) {
+    socket.on('exchanges', (exchanges) => {
       this.setState({
-        error: true,
+        exchanges,
         loading: false,
       });
-    }
-  }
+    })
 
-  async fetch() {
-    await this.setState({
-      loading: true,
-    });
-    const [ tickersResponse, exchangesResponse ] = await BitValorService.fetch();
-    const exchanges = parseExchanges(exchangesResponse, tickersResponse);
-  
-    this.setState({
-      exchanges,
-      loading: false,
-    });
   }
 
   render() {
